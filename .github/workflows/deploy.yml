@@ -1,4 +1,4 @@
-name: 🚀 Deploy awonbe
+name: 🚀 Deploy webwii
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IS_TAG: ${{ github.ref_type == 'tag' }}
-      BASE_URL: ${{ github.ref_type == 'tag' && format('/awonbe/{0}/', github.ref_name) || '/awonbe/' }}
+      BASE_URL: ${{ github.ref_type == 'tag' && format('/webwii/{0}/', github.ref_name) || '/webwii/' }}
       DEST_DIR: ${{ github.ref_type == 'tag' && github.ref_name || '.' }}
       
     steps:
@@ -64,5 +64,5 @@ jobs:
 
       - run: |
           echo "✅ Deploy completado!"
-          echo "🔥 Firebase: https://awonbeee.web.app (solo main)"
-          echo "🐙 GitHub: https://wtaype.me/awonbe/${{ env.DEST_DIR }}"
+          echo "🔥 Firebase: https://webwii.web.app (solo main)"
+          echo "🐙 GitHub: https://wtaype.me/webwii/${{ env.DEST_DIR }}"
