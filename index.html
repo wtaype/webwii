@@ -241,11 +241,10 @@ blockquote{padding:1.5vh 2vh;margin:2vh 0;background:var(--bg4);border-left:4px 
 .wilogo i{font-size:var(--fz_l1)}
 .wilogo:hover{transform:scale(1.05);filter:drop-shadow(0 0 0.5vh var(--mco))}
 .winav{display:flex;gap:.3vh}
-.nv_item, .wibtn_auth{display:flex;align-items:center;gap:0.4vw;padding:0.7vh 1vw;background:var(--bg1);border-radius:0.8vh;color:var(--tx);text-decoration:none;font-size:var(--fz_m1);font-weight:500;transition:all var(--tr_f);border:1px solid transparent}
+.nv_item, .wibtn_auth{display:flex;align-items:center;gap:0.4vw;padding:0.7vh 1vw;background:var(--bg1);border-radius:0.8vh;color:var(--tx);text-decoration:none;font-size:var(--fz_m1);font-weight:500;transition:all var(--tr_f);border:1px solid transparent;box-shadow:0.2vh 0 0.3vh rgb(0 0 0 / 5%);}
 .nv_item i{font-size:var(--fz_m3)}
-.nv_item:hover{background:var(--bg5);border-color:var(--mco);transform:translateY(-0.2vh);box-shadow:0 0.4vh 1vh rgba(0,0,0,0.1)}
-.nv_item.active, .wibtn_auth:hover{background:var(--mco);color:var(--txa);box-shadow:0 0.4vh 1.2vh rgba(0,0,0,0.15)}
-.nv_item.active i, .wibtn_auth:hover i{color:var(--txa)}
+.nv_item.active, .nv_item:hover{background:var(--mco);color:var(--txa);transition: background .99s ease-out, color .3s ease-out;font-weight: 600;box-shadow:0.2vh 0 0.3vh rgb(0 0 0 / 10%)}
+.nv_item.active i, .nv_item:hover i{color:var(--txa);transition: color .6s ease-out}
 .nv_right{display:flex;align-items:center;gap:.5vh}
 .wibtn_auth:hover, .wibtn_auth:hover i{cursor: pointer;}
 .wiauth{display:flex;gap:.5vh;min-width:13.9vw}
@@ -287,7 +286,7 @@ blockquote{padding:1.5vh 2vh;margin:2vh 0;background:var(--bg4);border-left:4px 
   <div class="nv_left">
     <h1 class="wilogo"><a href="/"><i class="fas fa-heart"></i> Webwii</a></h1>
     <nav class="winav">
-      <a href="/" class="nv_item active" data-page="inicio">
+      <a href="/" class="nv_item" data-page="inicio">
         <i class="fas fa-house"></i> <span>Inicio</span>
       </a>
       <a href="/imagen" class="nv_item" data-page="imagen">

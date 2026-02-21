@@ -2,7 +2,7 @@
 export let id = 'webwii'
 export let app = 'Webwii'
 export let lanzamiento = 2026;
-export let ipdev = '192.168.18.234';
+export let ipdev = '192.168.18.62';
 export let autor = '@wilder.taype';
 export let link = 'https://wtaype.github.io/';
 export let version = 'v9';
