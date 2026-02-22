@@ -3,504 +3,222 @@ import $ from 'jquery';
 import { app, version, autor, link } from '../wii.js';
 import { wiVista, year, wiTip, wicopy } from '../widev.js';
 
-// Características del sistema Smile para AWONBE
-const features = [
-  {
-    icono: 'fa-heart',
-    titulo: 'Mensajes Personalizados',
-    descripcion: 'Crea tarjetas digitales con frases de Awonbe personalizadas con tu nombre',
-    color: 'Dulce',
-    ejemplos: '100+ plantillas',
-    tiempo: '2 minutos'
-  },
-  {
-    icono: 'fa-share-nodes',
-    titulo: 'Comparte Inspiración',
-    descripcion: 'Envía frases motivacionales a tus seres queridos por WhatsApp o redes sociales',
-    color: 'Cielo',
-    ejemplos: '4 plataformas',
-    tiempo: '1 minuto'
-  },
-  {
-    icono: 'fa-calendar-heart',
-    titulo: 'Frases del Día',
-    descripcion: 'Recibe diariamente una frase de motivación, reflexión o fe personalizada',
-    color: 'Mora',
-    ejemplos: 'Diario',
-    tiempo: 'Automático'
-  },
-  {
-    icono: 'fa-bookmark',
-    titulo: 'Guarda Favoritas',
-    descripcion: 'Crea tu colección personal de frases que más te inspiran y accede cuando quieras',
-    color: 'Paz',
-    ejemplos: 'Ilimitado',
-    tiempo: '30 segundos'
-  },
-  {
-    icono: 'fa-palette',
-    titulo: 'Diseños Hermosos',
-    descripcion: 'Elige entre diferentes estilos visuales con colores vibrantes y fondos inspiradores',
-    color: 'Cielo',
-    ejemplos: '50+ diseños',
-    tiempo: '1 minuto'
-  },
-  {
-    icono: 'fa-mobile-screen',
-    titulo: 'Descarga como Imagen',
-    descripcion: 'Guarda tus frases personalizadas en HD para usarlas como fondo o compartir',
-    color: 'Dulce',
-    ejemplos: 'Alta calidad',
-    tiempo: '30 segundos'
-  }
-];
-
-// Estadísticas del proyecto Awonbe
+// ============================================================
+// 📦 DATA
+// ============================================================
 const stats = [
-  { numero: '1,000+', label: 'Frases Publicadas', icono: 'fa-quote-left' },
-  { numero: '50K+', label: 'Seguidores Totales', icono: 'fa-users' },
-  { numero: '500K+', label: 'Vistas Totales', icono: 'fa-eye' },
-  { numero: '4', label: 'Redes Sociales', icono: 'fa-share-nodes' }
+  { num: '50+',  label: 'Herramientas',  icon: 'fa-robot' },
+  { num: '7',    label: 'Categorías',    icon: 'fa-layer-group' },
+  { num: '100%', label: 'Gratis',        icon: 'fa-heart' },
+  { num: year(), label: 'Actualizado',   icon: 'fa-calendar-check' },
 ];
 
-// Pasos para usar Smile con Awonbe
+const features = [
+  { icon: 'fa-bolt',               color: 'Cielo', titulo: 'Acceso Inmediato',     desc: 'Sin registro ni pasos. Entra y usa cualquier herramienta IA en segundos.' },
+  { icon: 'fa-wand-magic-sparkles',color: 'Dulce', titulo: 'Prompts Incluidos',    desc: 'Cada herramienta incluye prompts recomendados listos para copiar y usar.' },
+  { icon: 'fa-layer-group',        color: 'Paz',   titulo: 'Todo Organizado',      desc: '7 categorías temáticas con más de 50 herramientas clasificadas.' },
+  { icon: 'fa-rotate-right',       color: 'Mora',  titulo: 'Siempre Actualizado',  desc: 'Añadimos constantemente las IAs más nuevas y populares del mercado.' },
+  { icon: 'fa-mobile-screen',      color: 'Cielo', titulo: '100% Responsive',      desc: 'Diseño optimizado para verse perfecto en todos tus dispositivos.' },
+  { icon: 'fa-palette',            color: 'Dulce', titulo: '5 Temas de Color',     desc: 'Personaliza tu experiencia con 5 temas visuales únicos.' },
+];
+
 const pasos = [
-  {
-    numero: 1,
-    icono: 'fa-user-plus',
-    titulo: 'Regístrate Gratis',
-    descripcion: 'Crea tu cuenta en menos de 1 minuto con tu correo electrónico',
-    tiempo: '1 min'
-  },
-  {
-    numero: 2,
-    icono: 'fa-heart-circle-plus',
-    titulo: 'Explora y Elige',
-    descripcion: 'Navega por nuestras 1,000+ frases y elige la que más te inspire hoy',
-    tiempo: '2-3 min'
-  },
-  {
-    numero: 3,
-    icono: 'fa-wand-magic-sparkles',
-    titulo: 'Personaliza',
-    descripcion: 'Añade tu nombre, elige colores, fondos y crea tu mensaje único',
-    tiempo: '2 min'
-  },
-  {
-    numero: 4,
-    icono: 'fa-paper-plane',
-    titulo: 'Comparte o Descarga',
-    descripcion: 'Envía por WhatsApp, comparte en redes o descarga en HD para usar cuando quieras',
-    tiempo: '30 seg'
-  }
+  { num: '1', icon: 'fa-compass',   titulo: 'Explora',   desc: 'Navega por las categorías y descubre herramientas de IA increíbles.' },
+  { num: '2', icon: 'fa-copy',      titulo: 'Copia',     desc: 'Toma los prompts recomendados directamente desde cada herramienta.' },
+  { num: '3', icon: 'fa-rocket',    titulo: '¡Úsala!',   desc: 'Abre la herramienta y comienza a crear con el poder de la IA.' },
 ];
 
-// Testimonios reales de usuarios
-const testimonios = [
-  {
-    nombre: 'María González',
-    tiempo: 'Enero 2025',
-    estrellas: 5,
-    texto: '¡Hermoso! Cada día comparto una frase de Awonbe en mis estados. Mis amigos me preguntan de dónde las saco 💕',
-    avatar: 'M',
-    red: 'Instagram'
-  },
-  {
-    nombre: 'Carlos Rodríguez',
-    tiempo: 'Diciembre 2024',
-    estrellas: 5,
-    texto: 'Las frases de fe en Dios me han ayudado mucho en momentos difíciles. Gracias Awonbe 🙏',
-    avatar: 'C',
-    red: 'Facebook'
-  },
-  {
-    nombre: 'Ana López',
-    tiempo: 'Febrero 2025',
-    estrellas: 5,
-    texto: 'Uso Smile para personalizar las frases y enviarlas a mi familia. ¡Es súper fácil y quedan preciosas! 😍',
-    avatar: 'A',
-    red: 'WhatsApp'
-  }
+const tecnologias = [
+  { icon: 'fab fa-js',         label: 'JavaScript ES6+' },
+  { icon: 'fab fa-css3-alt',   label: 'CSS3 Moderno' },
+  { icon: 'fab fa-html5',      label: 'HTML5 Semántico' },
+  { icon: 'fas fa-fire',       label: 'Firebase' },
+  { icon: 'fas fa-bolt',       label: 'Vite' },
+  { icon: 'fas fa-mobile-screen', label: 'Responsive' },
 ];
 
-// Curiosidades del proyecto
-const curiosidades = [
-  {
-    icono: 'fa-calendar-days',
-    titulo: '365 Días de Inspiración',
-    descripcion: 'Publicamos contenido nuevo TODOS los días del año sin falta',
-    color: 'Cielo'
-  },
-  {
-    icono: 'fa-globe-americas',
-    titulo: '15+ Países',
-    descripcion: 'Nuestros seguidores nos leen desde España, México, Argentina, Colombia y más',
-    color: 'Paz'
-  },
-  {
-    icono: 'fa-clock',
-    titulo: 'Horarios Especiales',
-    descripcion: 'Publicamos a las 7am (motivación) y 9pm (reflexión) para acompañar tu día',
-    color: 'Mora'
-  },
-  {
-    icono: 'fa-heart-pulse',
-    titulo: '+2,500 Reacciones/día',
-    descripcion: 'Nuestras frases generan miles de likes, comentarios y compartidos diariamente',
-    color: 'Dulce'
-  }
+const redes = [
+  { nombre: 'YouTube',   icon: 'fab fa-youtube',   url: 'https://youtube.com', seguidores: '10K+',  color: '#FF0000', desc: 'Videos y tutoriales de IA' },
+  { nombre: 'TikTok',    icon: 'fab fa-tiktok',    url: 'https://tiktok.com',  seguidores: '50K+',  color: '#000000', desc: 'Tips rápidos de herramientas IA' },
+  { nombre: 'Instagram', icon: 'fab fa-instagram', url: 'https://instagram.com',seguidores: '15K+', color: '#E4405F', desc: 'Diseños e inspiración visual' },
+  { nombre: 'Facebook',  icon: 'fab fa-facebook',  url: 'https://facebook.com',seguidores: '25K+',  color: '#1877F2', desc: 'Comunidad y novedades diarias' },
 ];
 
-// Ventajas de usar Smile con Awonbe
-const ventajas = [
-  { icono: 'fa-check-circle', texto: '100% Gratis - Sin pagos ocultos' },
-  { icono: 'fa-infinity', texto: 'Mensajes Ilimitados - Crea cuantos quieras' },
-  { icono: 'fa-palette', texto: 'Diseños Profesionales - Sin experiencia necesaria' },
-  { icono: 'fa-mobile-screen', texto: 'Mobile First - Optimizado para celular' },
-  { icono: 'fa-cloud-arrow-down', texto: 'Descarga HD - Imágenes alta calidad' },
-  { icono: 'fa-shield-heart', texto: 'Privado y Seguro - Tus datos protegidos' }
-];
-
-// Categorías de frases disponibles
-const categorias = [
-  { nombre: 'Fe en Dios', icono: 'fa-hands-praying', cantidad: 250, color: 'Paz' },
-  { nombre: 'Motivación', icono: 'fa-rocket', cantidad: 300, color: 'Cielo' },
-  { nombre: 'Reflexión', icono: 'fa-brain', cantidad: 200, color: 'Mora' },
-  { nombre: 'Vida', icono: 'fa-heart', cantidad: 250, color: 'Dulce' }
-];
-
+// ============================================================
+// 🎨 RENDER
+// ============================================================
 export const render = () => `
-  <div class="descubre_container">
-    <!-- HERO PRINCIPAL -->
-    <section class="desc_hero">
-      <div class="hero_bg"></div>
-      <div class="hero_wrapper">
-        <div class="hero_content">
-          <div class="hero_badge">
-            <i class="fas fa-sparkles"></i>
-            <span>Descubre ${app} Smile</span>
+  <div class="ac_wrap">
+
+    <!-- ══ HERO ══ -->
+    <section class="ac_hero">
+      <div class="ac_hero_orb ac_orb1"></div>
+      <div class="ac_hero_orb ac_orb2"></div>
+      <div class="ac_hero_body">
+        <div class="ac_hero_logo">
+          <img src="/logo.webp" alt="${app}" loading="lazy">
+        </div>
+        <div class="ac_hero_badge"><i class="fas fa-robot"></i> Centro de Inteligencia Artificial</div>
+        <h1 class="ac_hero_tit">${app}</h1>
+        <p class="ac_hero_sub">
+          Descubre, usa y domina las mejores <strong>herramientas de IA</strong> del mundo.
+          Organizadas, listas y completamente gratis para ti.
+        </p>
+        <div class="ac_hero_stats">
+          ${stats.map(s => `
+            <div class="ac_stat">
+              <i class="fas ${s.icon}"></i>
+              <strong>${s.num}</strong>
+              <span>${s.label}</span>
+            </div>`).join('')}
+        </div>
+        <div class="ac_hero_btns">
+          <a href="/imagen" class="ac_btn_p"><i class="fas fa-rocket"></i> Explorar IA</a>
+          <button class="ac_btn_s" id="ac_compartir"><i class="fas fa-share-nodes"></i> Compartir</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FEATURES ══ -->
+    <section class="ac_sec">
+      <div class="ac_sec_head">
+        <div class="ac_sec_badge"><i class="fas fa-star"></i> ¿Qué ofrecemos?</div>
+        <h2 class="ac_sec_tit">Todo lo que necesitas <span class="ac_grad">en un lugar</span></h2>
+      </div>
+      <div class="ac_feat_grid">
+        ${features.map(f => `
+          <div class="ac_feat_card wi_fadeUp ac_color_${f.color.toLowerCase()}">
+            <div class="ac_feat_ico"><i class="fas ${f.icon}"></i></div>
+            <h3>${f.titulo}</h3>
+            <p>${f.desc}</p>
+          </div>`).join('')}
+      </div>
+    </section>
+
+    <!-- ══ CÓMO FUNCIONA ══ -->
+    <section class="ac_sec ac_sec_alt">
+      <div class="ac_sec_head">
+        <div class="ac_sec_badge"><i class="fas fa-route"></i> Cómo funciona</div>
+        <h2 class="ac_sec_tit">3 pasos para <span class="ac_grad">empezar ahora</span></h2>
+      </div>
+      <div class="ac_pasos">
+        ${pasos.map((p, i) => `
+          <div class="ac_paso wi_fadeUp">
+            <div class="ac_paso_num">${p.num}</div>
+            <div class="ac_paso_ico"><i class="fas ${p.icon}"></i></div>
+            <h3>${p.titulo}</h3>
+            <p>${p.desc}</p>
           </div>
-          <h1>Personaliza y Comparte las Frases que Inspiran tu Vida 💝</h1>
-          <p class="hero_desc">
-            Con <strong>${app} Smile</strong> puedes crear tarjetas digitales hermosas con nuestras 
-            <strong>1,000+ frases de motivación, reflexión y fe en Dios</strong>. 
-            Personaliza, descarga y comparte inspiración con el mundo.
+          ${i < pasos.length - 1 ? '<div class="ac_paso_sep"><i class="fas fa-chevron-right"></i></div>' : ''}`
+        ).join('')}
+      </div>
+    </section>
+
+    <!-- ══ MISIÓN / VISIÓN ══ -->
+    <section class="ac_sec">
+      <div class="ac_sec_head">
+        <div class="ac_sec_badge"><i class="fas fa-bullseye"></i> Misión y Visión</div>
+        <h2 class="ac_sec_tit">Lo que nos <span class="ac_grad">mueve</span></h2>
+      </div>
+      <div class="ac_mv_grid">
+        <div class="ac_mv_card wi_fadeUp">
+          <div class="ac_mv_ico"><i class="fas fa-bullseye"></i></div>
+          <h3>Nuestra Misión</h3>
+          <p>Hacer que cualquier persona pueda descubrir y dominar las herramientas de IA más modernas, sin complicaciones y totalmente gratis. Democratizar el acceso a la inteligencia artificial.</p>
+        </div>
+        <div class="ac_mv_card wi_fadeUp">
+          <div class="ac_mv_ico"><i class="fas fa-eye"></i></div>
+          <h3>Nuestra Visión</h3>
+          <p>Convertirnos en el directorio de IA más completo y actualizado en español, siendo el punto de partida para millones de personas que quieren aprovechar el poder de la inteligencia artificial.</p>
+        </div>
+        <div class="ac_mv_card wi_fadeUp">
+          <div class="ac_mv_ico"><i class="fas fa-hands-praying"></i></div>
+          <h3>Nuestros Valores</h3>
+          <p>Gratuidad, transparencia, actualización constante y accesibilidad para todos. Creemos que la tecnología debe estar al alcance de cada persona, sin importar su nivel técnico.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ REDES ══ -->
+    <section class="ac_sec ac_sec_alt">
+      <div class="ac_sec_head">
+        <div class="ac_sec_badge"><i class="fas fa-share-nodes"></i> Síguenos</div>
+        <h2 class="ac_sec_tit">Encuéntranos en <span class="ac_grad">redes sociales</span></h2>
+      </div>
+      <div class="ac_redes_grid">
+        ${redes.map(r => `
+          <a href="${r.url}" target="_blank" rel="noopener" class="ac_red_card wi_fadeUp"
+             style="--rc:${r.color}" ${wiTip(`Ir a ${r.nombre}`)}>
+            <div class="ac_red_ico"><i class="${r.icon}"></i></div>
+            <h3>${r.nombre}</h3>
+            <span class="ac_red_subs">${r.seguidores} seguidores</span>
+            <p>${r.desc}</p>
+            <div class="ac_red_btn">Seguir <i class="fas fa-arrow-right"></i></div>
+          </a>`).join('')}
+      </div>
+    </section>
+
+    <!-- ══ TECNOLOGÍA ══ -->
+    <section class="ac_sec">
+      <div class="ac_sec_head">
+        <div class="ac_sec_badge"><i class="fas fa-code"></i> Stack técnico</div>
+        <h2 class="ac_sec_tit">Construido con <span class="ac_grad">lo mejor</span></h2>
+      </div>
+      <div class="ac_tech_grid">
+        ${tecnologias.map(t => `
+          <div class="ac_tech_item wi_fadeUp">
+            <i class="${t.icon}"></i>
+            <span>${t.label}</span>
+          </div>`).join('')}
+      </div>
+    </section>
+
+    <!-- ══ CTA ══ -->
+    <section class="ac_cta_sec">
+      <div class="ac_cta_wrap wi_fadeUp">
+        <div class="ac_cta_glow"></div>
+        <div class="ac_cta_inner">
+          <span class="ac_cta_emoji">💙</span>
+          <h2>¿Listo para empezar?</h2>
+          <p>Explora más de 50 herramientas de IA organizadas y listas para usar</p>
+          <div class="ac_cta_btns">
+            <a href="/imagen" class="ac_btn_p"><i class="fas fa-rocket"></i> Explorar Ahora</a>
+            <a href="/" class="ac_btn_s"><i class="fas fa-house"></i> Ir al Inicio</a>
+          </div>
+          <p class="ac_footer_txt">
+            ${app} ${version} · Hecho con <i class="fas fa-heart"></i> por
+            <a href="${link}" target="_blank" rel="noopener">${autor}</a> · ${year()}
           </p>
-          <div class="hero_ctas">
-            <a href="/login" class="btn_primary" ${wiTip('¡Comienza gratis!')}>
-              <i class="fas fa-user-plus"></i>
-              <span>Crear Cuenta Gratis</span>
-            </a>
-            <a href="/" class="btn_secondary" ${wiTip('Ver frases')}>
-              <i class="fas fa-heart"></i>
-              <span>Explorar Frases</span>
-            </a>
-          </div>
-          <div class="hero_trust">
-            <div class="trust_item">
-              <i class="fas fa-users"></i>
-              <span>50K+ seguidores</span>
-            </div>
-            <div class="trust_item">
-              <i class="fas fa-quote-left"></i>
-              <span>1,000+ frases</span>
-            </div>
-            <div class="trust_item">
-              <i class="fas fa-check-circle"></i>
-              <span>100% gratis</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="hero_visual">
-          <div class="visual_showcase">
-            <div class="showcase_card card_main" data-vista="cardMain">
-              <div class="card_header">
-                <img src="/logo.webp" alt="Awonbe" class="card_logo" />
-                <span class="card_badge">Fe en Dios</span>
-              </div>
-              <div class="card_body">
-                <i class="fas fa-quote-left card_quote"></i>
-                <p class="card_text">"Con fe, todo es posible. Confía en Dios y en ti mismo"</p>
-              </div>
-              <div class="card_footer">
-                <span class="card_author">- Awonbe</span>
-                <i class="fas fa-heart card_heart"></i>
-              </div>
-            </div>
-            <div class="showcase_stats">
-              <div class="stat_mini"><i class="fas fa-eye"></i> 500K+ vistas</div>
-              <div class="stat_mini"><i class="fas fa-share"></i> Fácil compartir</div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- ESTADÍSTICAS -->
-    <section class="desc_stats">
-      <div class="stats_wrapper">
-        ${stats.map((stat, i) => `
-          <div class="stat_box" data-vista="stat${i}">
-            <div class="stat_icon">
-              <i class="fas ${stat.icono}"></i>
-            </div>
-            <h3>${stat.numero}</h3>
-            <p>${stat.label}</p>
-          </div>
-        `).join('')}
-      </div>
-    </section>
+  </div>`;
 
-    <!-- CARACTERÍSTICAS -->
-    <section class="desc_features">
-      <div class="features_wrapper">
-        <div class="section_header">
-          <span class="section_badge">✨ Qué Puedes Hacer</span>
-          <h2>Funcionalidades de ${app} Smile</h2>
-          <p>Todo lo que necesitas para personalizar y compartir frases inspiradoras</p>
-        </div>
-
-        <div class="features_grid">
-          ${features.map((feat, i) => `
-            <div class="feature_item ${feat.color.toLowerCase()}" data-vista="feat${i}">
-              <div class="feature_header">
-                <div class="feature_icon">
-                  <i class="fas ${feat.icono}"></i>
-                </div>
-                <div class="feature_meta">
-                  <span class="meta_item"><i class="fas fa-clock"></i> ${feat.tiempo}</span>
-                  <span class="meta_item"><i class="fas fa-layer-group"></i> ${feat.ejemplos}</span>
-                </div>
-              </div>
-              <h3>${feat.titulo}</h3>
-              <p>${feat.descripcion}</p>
-              <button class="btn_ver_mas" data-tipo="${feat.titulo}" ${wiTip('Disponible al registrarte')}>
-                Probar Ahora <i class="fas fa-arrow-right"></i>
-              </button>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    </section>
-
-    <!-- CÓMO FUNCIONA -->
-    <section class="desc_pasos">
-      <div class="pasos_wrapper">
-        <div class="section_header">
-          <span class="section_badge">📋 Paso a Paso</span>
-          <h2>¿Cómo Usar ${app} Smile?</h2>
-          <p>Solo 4 pasos simples para crear tu mensaje personalizado</p>
-        </div>
-
-        <div class="pasos_grid">
-          ${pasos.map((paso, i) => `
-            <div class="paso_card" data-vista="paso${i}">
-              <div class="paso_numero">${paso.numero}</div>
-              <div class="paso_icono">
-                <i class="fas ${paso.icono}"></i>
-              </div>
-              <h3>${paso.titulo}</h3>
-              <p>${paso.descripcion}</p>
-              <span class="paso_tiempo"><i class="fas fa-stopwatch"></i> ${paso.tiempo}</span>
-            </div>
-            ${i < pasos.length - 1 ? '<div class="paso_arrow"><i class="fas fa-chevron-right"></i></div>' : ''}
-          `).join('')}
-        </div>
-      </div>
-    </section>
-
-    <!-- CATEGORÍAS DISPONIBLES -->
-    <section class="desc_categorias">
-      <div class="categorias_wrapper">
-        <div class="section_header">
-          <span class="section_badge">🎯 Categorías</span>
-          <h2>1,000+ Frases Organizadas para Ti</h2>
-          <p>Encuentra la inspiración perfecta para cada momento</p>
-        </div>
-
-        <div class="categorias_grid">
-          ${categorias.map((cat, i) => `
-            <div class="categoria_card ${cat.color.toLowerCase()}" data-vista="cat${i}">
-              <div class="categoria_icono">
-                <i class="fas ${cat.icono}"></i>
-              </div>
-              <h3>${cat.nombre}</h3>
-              <p class="categoria_cantidad">${cat.cantidad} frases</p>
-              <a href="/" class="categoria_link" ${wiTip('Ver frases')}>
-                Explorar <i class="fas fa-arrow-right"></i>
-              </a>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    </section>
-
-    <!-- CURIOSIDADES -->
-    <section class="desc_curiosidades">
-      <div class="curiosidades_wrapper">
-        <div class="section_header">
-          <span class="section_badge">💡 ¿Sabías Qué?</span>
-          <h2>Curiosidades de ${app}</h2>
-          <p>Datos interesantes sobre nuestro proyecto que inspira a miles</p>
-        </div>
-
-        <div class="curiosidades_grid">
-          ${curiosidades.map((cur, i) => `
-            <div class="curiosidad_card ${cur.color.toLowerCase()}" data-vista="cur${i}">
-              <div class="curiosidad_icono">
-                <i class="fas ${cur.icono}"></i>
-              </div>
-              <h3>${cur.titulo}</h3>
-              <p>${cur.descripcion}</p>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    </section>
-
-    <!-- VENTAJAS -->
-    <section class="desc_ventajas">
-      <div class="ventajas_wrapper">
-        <div class="section_header">
-          <span class="section_badge">🎁 Beneficios</span>
-          <h2>¿Por qué usar ${app} Smile?</h2>
-          <p>Todo lo que obtienes completamente gratis</p>
-        </div>
-
-        <div class="ventajas_grid">
-          ${ventajas.map((vent, i) => `
-            <div class="ventaja_item" data-vista="vent${i}">
-              <i class="fas ${vent.icono}"></i>
-              <span>${vent.texto}</span>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    </section>
-
-    <!-- TESTIMONIOS -->
-    <section class="desc_testimonios">
-      <div class="testimonios_wrapper">
-        <div class="section_header">
-          <span class="section_badge">💬 Testimonios</span>
-          <h2>Lo que Dicen Nuestros Seguidores</h2>
-          <p>Historias reales de personas como tú que usan ${app}</p>
-        </div>
-
-        <div class="testimonios_grid">
-          ${testimonios.map((test, i) => `
-            <div class="testimonio_card" data-vista="test${i}">
-              <div class="testimonio_header">
-                <div class="testimonio_avatar">${test.avatar}</div>
-                <div class="testimonio_info">
-                  <h4>${test.nombre}</h4>
-                  <span class="testimonio_tiempo">${test.tiempo}</span>
-                </div>
-                <div class="testimonio_red ${test.red.toLowerCase()}">
-                  <i class="fab fa-${test.red.toLowerCase()}"></i>
-                </div>
-              </div>
-              <div class="testimonio_stars">
-                ${Array(test.estrellas).fill('<i class="fas fa-star"></i>').join('')}
-              </div>
-              <p>${test.texto}</p>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    </section>
-
-    <!-- REDES SOCIALES -->
-    <section class="desc_redes">
-      <div class="redes_wrapper">
-        <div class="section_header">
-          <span class="section_badge">🌐 Síguenos</span>
-          <h2>Encuéntranos en Redes Sociales</h2>
-          <p>Contenido diario de motivación, reflexión y fe en Dios</p>
-        </div>
-
-        <div class="redes_grid">
-          <a href="https://www.youtube.com/channel/UCBnyIE557egJiZszex-vURg" target="_blank" rel="noopener" class="red_card youtube" data-vista="red1">
-            <div class="red_icono"><i class="fab fa-youtube"></i></div>
-            <h3>YouTube</h3>
-            <p class="red_seguidores">10K+ suscriptores</p>
-            <p>Videos motivacionales diarios</p>
-            <span class="red_seguir">Ver Canal <i class="fas fa-external-link"></i></span>
-          </a>
-          <a href="https://www.tiktok.com/@awonbe" target="_blank" rel="noopener" class="red_card tiktok" data-vista="red2">
-            <div class="red_icono"><i class="fab fa-tiktok"></i></div>
-            <h3>TikTok</h3>
-            <p class="red_seguidores">50K+ seguidores</p>
-            <p>Frases cortas inspiradoras</p>
-            <span class="red_seguir">Ver Perfil <i class="fas fa-external-link"></i></span>
-          </a>
-          <a href="https://www.instagram.com/awonbeee/" target="_blank" rel="noopener" class="red_card instagram" data-vista="red3">
-            <div class="red_icono"><i class="fab fa-instagram"></i></div>
-            <h3>Instagram</h3>
-            <p class="red_seguidores">15K+ seguidores</p>
-            <p>Diseños visuales hermosos</p>
-            <span class="red_seguir">Ver Perfil <i class="fas fa-external-link"></i></span>
-          </a>
-          <a href="https://www.facebook.com/awonbe/" target="_blank" rel="noopener" class="red_card facebook" data-vista="red4">
-            <div class="red_icono"><i class="fab fa-facebook"></i></div>
-            <h3>Facebook</h3>
-            <p class="red_seguidores">25K+ seguidores</p>
-            <p>Comunidad activa y reflexiones</p>
-            <span class="red_seguir">Ver Página <i class="fas fa-external-link"></i></span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA FINAL -->
-    <section class="desc_cta">
-      <div class="cta_wrapper">
-        <div class="cta_content">
-          <span class="cta_icono">🚀</span>
-          <h2>¿Listo para Crear tu Primer Mensaje?</h2>
-          <p>Únete a ${app} Smile y empieza a personalizar las frases que inspiran tu vida</p>
-          <a href="#/auth?mode=registro" class="btn_cta" ${wiTip('¡Comenzar ahora!')}>
-            <i class="fas fa-heart"></i>
-            <span>Comenzar Ahora Gratis</span>
-          </a>
-          <div class="cta_features">
-            <div class="cta_feature"><i class="fas fa-check"></i> Sin tarjeta de crédito</div>
-            <div class="cta_feature"><i class="fas fa-check"></i> Mensajes ilimitados</div>
-            <div class="cta_feature"><i class="fas fa-check"></i> 100% gratis siempre</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FOOTER INFO -->
-    <div class="desc_footer">
-      <p>${app} Smile - Personaliza frases inspiradoras • Creado con <i class="fas fa-heart"></i> por <a href="${link}" target="_blank" rel="noopener">${autor}</a> • ${version} © ${year()}</p>
-    </div>
-  </div>
-`;
-
+// ============================================================
+// ⚡ INIT
+// ============================================================
 export const init = () => {
-  console.log(`✅ Descubre ${app} Smile cargado`);
-  
-  // Animaciones con Intersection Observer
-  [
-    '.stat_box', '.feature_item', '.paso_card', '.categoria_card', 
-    '.curiosidad_card', '.ventaja_item', '.testimonio_card', '.red_card',
-    '.cardMain', '.showcase_card'
-  ].forEach(sel => {
-    $(sel).each((_, el) => wiVista(el, () => $(el).addClass('visible')));
+  wiVista('.ac_feat_card',  null, { anim: 'wi_fadeUp', stagger: 80 });
+  wiVista('.ac_paso',       null, { anim: 'wi_fadeUp', stagger: 120 });
+  wiVista('.ac_mv_card',    null, { anim: 'wi_fadeUp', stagger: 100 });
+  wiVista('.ac_red_card',   null, { anim: 'wi_fadeUp', stagger: 80 });
+  wiVista('.ac_tech_item',  null, { anim: 'wi_fadeUp', stagger: 60 });
+  wiVista('.ac_cta_wrap',   null, { anim: 'wi_fadeUp' });
+
+  $('#ac_compartir').on('click', function() {
+    const url = `https://webwii.web.app/`;
+    if (navigator.share) {
+      navigator.share({ title: `${app}`, text: `💙 ${app} — Centro de Herramientas de IA`, url }).catch(() => {});
+    } else {
+      wicopy(url, this, '¡Link copiado! ✨');
+    }
   });
 
-  // Ver más características
-  $('.btn_ver_mas').on('click', function() {
-    const tipo = $(this).data('tipo');
-    wiTip(this, `Regístrate para usar: ${tipo}`, 'info', 2500);
-    setTimeout(() => window.location.hash = '/auth?mode=registro', 1200);
-  });
+  console.log(`📖 ${app} ${version} · Acerca ${year()}`);
 };
 
 export const cleanup = () => {
-  $('.btn_ver_mas').off('click');
-  console.log('🧹 Descubre limpiado');
+  $('#ac_compartir').off('click');
+  console.log('🧹 Acerca');
 };

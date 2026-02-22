@@ -9,7 +9,7 @@ import { wiSpin, wiTip, Notificacion, abrirModal, cerrarModal, getls, savels, wi
 // ============================================================
 export const norm = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 export const toId = s => s.trim().toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');
-export const SKEL = (n=6) => Array(n).fill(`
+export const SKEL = (n=10) => Array(n).fill(`
   <div class="mo_skel">
     <div class="mo_skel_top shimmer"></div>
     <div class="mo_skel_b">

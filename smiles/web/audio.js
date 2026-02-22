@@ -1,14 +1,10 @@
 import { crearModelo, renderTopbar, renderPrompts, renderModal } from './modelo.js';
 
-// ============================================================
 // 📦 PREFIJO + MODELO
-// ============================================================
 const P = 'aud';
 const modelo = crearModelo({ p: P, coleccion: 'audio', icon: 'headphones' });
 
-// ============================================================
 // 🃏 CARD — usa clases mo_ compartidas
-// ============================================================
 const cardHtml = (h, auth) => `
   <div class="mo_card wi_fadeUp" data-id="${h.id}">
 
@@ -50,9 +46,7 @@ const cardHtml = (h, auth) => `
 
   </div>`;
 
-// ============================================================
-// 🏗️ RENDER
-// ============================================================
+  // 🏗️ RENDER
 export const render = () => `
   <div class="mo_wrap">
     ${renderTopbar({ p: P, titulo: 'Audio con', grad: 'Inteligencia Artificial' })}
@@ -65,8 +59,6 @@ export const render = () => `
   </div>
   ${renderModal({ p: P, icon: 'headphones' })}`;
 
-// ============================================================
-// ⚙️ INIT / CLEANUP
-// ============================================================
+  // ⚙️ INIT / CLEANUP
 export const init    = () => { modelo.init(cardHtml); console.log('🎧 Audio IA · 2026'); };
 export const cleanup = () => { modelo.cleanup();      console.log('🧹 Audio'); };
