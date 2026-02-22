@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { app } from '../wii.js';
+import { Notificacion } from '../widev.js';
 import { wiPath, wiFade } from './rutadev.js';
 
 class WiRutas {
@@ -33,8 +34,7 @@ class WiRutas {
       document.title = titulo; mod.init?.();
       if (historial) wiPath.poner(norm === `/${this.HOME}` ? '/' : norm, titulo);
       this.actual = norm;
-    } catch (err) {
-      console.error('Error navegando:', err);
+    } catch (err) { Notificacion('Error en la ruta'); console.error('Error navegando:', err);
     } finally {
       this.cargand = false;
     }
