@@ -167,7 +167,7 @@ export const wiDate = (tm) => ({
 export const wicopy = (txt, elm = null, msg = '¡Copiado!') => {
   const getCnt = () => txt instanceof $ ? txt.text() || txt.val() || '' : txt?.nodeType ? txt.textContent || txt.value || '' : typeof txt === 'string' && txt.trim().match(/^[.#\[]/) && $(txt).length ? $(txt).text() || $(txt).val() || '' : String(txt ?? '');
   const cnt = getCnt();
-  const fin = () => elm ? wiTip(elm, msg, 'success', 1500) : console.log(`${msg}: ${cnt}`);
+  const fin = () => elm ? wiTip(elm, msg, 'mco', 1500) : console.log(`${msg}: ${cnt}`);
   if (navigator.clipboard?.writeText) {
     navigator.clipboard.writeText(cnt).then(fin).catch(() => {
       const $t = $('<textarea>').val(cnt).css({position:'absolute',left:'-9999px'}).appendTo('body');

@@ -1,212 +1,291 @@
 import './video.css';
 import $ from 'jquery';
-import { db } from '../smile/firebase.js';
-import { collection, doc, setDoc, getDocs, deleteDoc, serverTimestamp, query, orderBy } from 'firebase/firestore';
-import { wiSpin, wiTip, Notificacion, abrirModal, cerrarModal, getls, savels, year } from '../widev.js';
+import { wiVista } from '../widev.js';
 
-const CACHE = 'wii_video';
-let todos = [], filtrados = [], autenticado = !!getls('wiSmile');
-const norm = s => (s||'').toLowerCase();
-const toId = s => s.trim().toLowerCase().replace(/\s+/g,'');
-const SKEL = Array(8).fill(`
-  <div class="vid_skel">
-    <div class="vid_skel_img shimmer"></div>
-    <div class="vid_skel_t shimmer"></div>
-    <div class="vid_skel_s shimmer"></div>
-  </div>`).join('');
+const VIDEOS = [
+  {
+    id: 'runway', nombre: 'Runway', categoria: 'Generación',
+    desc: 'Genera y edita videos con IA de nivel cinematográfico. Usado en producciones reales de Hollywood.',
+    img: 'https://cdn.worldvectorlogo.com/logos/runway-2.svg',
+    url: 'https://runwayml.com', fav: true,
+    precio: '💳 Desde $12/mes', velocidad: '⚡ Rápido',
+    prompts: [
+      'A cinematic drone shot of a futuristic city at sunset, 4K, ultra realistic',
+      'Close-up of a woman crying in the rain, dramatic lighting, film noir style',
+      'Time-lapse of a blooming flower in a magical forest, soft pastel colors',
+    ],
+  },
+  {
+    id: 'kling', nombre: 'Kling AI', categoria: 'Generación',
+    desc: 'Generación de video hiperrealista con IA. Uno de los más avanzados en movimiento natural.',
+    img: 'https://kling.kuaishou.com/favicon.ico',
+    url: 'https://klingai.com', fav: true,
+    precio: '🆓 66 tokens gratis/día', velocidad: '🐢 Moderado',
+    prompts: [
+      'A person walking through a neon-lit rainy street in Tokyo, slow motion',
+      'A majestic eagle soaring over snow-capped mountains, ultra HD',
+      'An astronaut floating in space with Earth in the background, cinematic',
+    ],
+  },
+  {
+    id: 'kaiber', nombre: 'Kaiber AI', categoria: 'Animación',
+    desc: 'Transforma música y texto en videos animados únicos. Ideal para artistas y creadores.',
+    img: 'https://kaiber.ai/favicon.ico',
+    url: 'https://kaiber.ai', fav: true,
+    precio: '🆓 7 días gratis', velocidad: '⚡ Rápido',
+    prompts: [
+      'Abstract colorful waves pulsing to the rhythm of music, psychedelic art style',
+      'A synthwave city at night with neon lights reacting to bass beats',
+      'Geometric shapes morphing and dancing in perfect sync with the music',
+    ],
+  },
+  {
+    id: 'sora', nombre: 'Sora', categoria: 'Generación',
+    desc: 'El modelo de generación de video de OpenAI. Crea escenas increíbles desde texto.',
+    img: 'https://openai.com/favicon.ico',
+    url: 'https://sora.com', fav: true,
+    precio: '💳 Incluido en ChatGPT Plus', velocidad: '🐢 Lento',
+    prompts: [
+      'A golden retriever running through a field of sunflowers in slow motion, magical light',
+      'A futuristic Tokyo street with flying cars and holographic advertisements',
+      'Ocean waves crashing on a cliff at sunset, hyper-realistic 8K footage',
+    ],
+  },
+  {
+    id: 'hailuo', nombre: 'Hailuo AI', categoria: 'Generación',
+    desc: 'Generador de video IA de MiniMax. Alta calidad y movimientos fluidos sorprendentes.',
+    img: 'https://hailuoai.video/favicon.ico',
+    url: 'https://hailuoai.video', fav: false,
+    precio: '🆓 Gratis con límite diario', velocidad: '⚡ Rápido',
+    prompts: [
+      'Ocean waves crashing on rocks during a storm, dramatic lighting, cinematic',
+      'A samurai warrior standing in a bamboo forest, mist and morning light',
+      'A child blowing dandelion seeds in a meadow, soft bokeh background',
+    ],
+  },
+  {
+    id: 'luma', nombre: 'Luma Dream', categoria: 'Generación',
+    desc: 'Genera videos 3D y escenas realistas con IA. Ideal para visualizaciones y demos.',
+    img: 'https://lumalabs.ai/favicon.ico',
+    url: 'https://lumalabs.ai/dream-machine', fav: false,
+    precio: '🆓 30 generaciones gratis/mes', velocidad: '⚡ Rápido',
+    prompts: [
+      'A 3D rotating futuristic car on a dark showroom floor with neon reflections',
+      'A crystal palace in the middle of a frozen tundra, northern lights above',
+      'Product showcase of a perfume bottle with water droplets, luxury style',
+    ],
+  },
+  {
+    id: 'pika', nombre: 'Pika Labs', categoria: 'Generación',
+    desc: 'Crea y edita videos desde texto o imagen con IA. Interfaz sencilla y resultados rápidos.',
+    img: 'https://pika.art/favicon.ico',
+    url: 'https://pika.art', fav: false,
+    precio: '🆓 250 créditos gratis/mes', velocidad: '⚡ Rápido',
+    prompts: [
+      'A coffee cup with steam rising, cozy morning light, close-up macro shot',
+      'A neon sign flickering in a dark alley during rain, cyberpunk aesthetic',
+      'A book opening and its pages turning into flying birds, magical realism',
+    ],
+  },
+  {
+    id: 'capcut', nombre: 'CapCut', categoria: 'Edición',
+    desc: 'Editor de video simple y potente de TikTok. Perfecto para reels y contenido rápido.',
+    img: 'https://lf16-capcut.com/obj/capcutpc-packages-us/capcut_website_new/cap-cut-img/capcut-logo.ico',
+    url: 'https://www.capcut.com', fav: false,
+    precio: '🆓 100% gratuito', velocidad: '⚡ Muy rápido',
+    prompts: [
+      'Usa la plantilla "Dynamic Beat" con tus fotos para un reels viral automático',
+      'Aplica el efecto "AI Slow Motion" a un video de 60fps para dramatismo',
+      'Usa "Auto Captions" con fuente bold para subtítulos estilo TikTok viral',
+    ],
+  },
+  {
+    id: 'picsart', nombre: 'Picsart', categoria: 'Edición',
+    desc: 'Edición creativa de fotos y videos con filtros IA. Comunidad de millones de creadores.',
+    img: 'https://picsart.com/favicon.ico',
+    url: 'https://picsart.com', fav: false,
+    precio: '🆓 Plan gratis disponible', velocidad: '⚡ Rápido',
+    prompts: [
+      'Aplica el filtro AI "Anime Style" a tu selfie para convertirte en personaje animado',
+      'Usa "AI Background Remove + Replace" con fondo de galaxia para tu foto de perfil',
+      'Genera un collage automático de 9 fotos con el estilo "Aesthetic Pastel"',
+    ],
+  },
+  {
+    id: 'invideo', nombre: 'InVideo AI', categoria: 'Edición',
+    desc: 'Crea videos completos desde un prompt de texto. Plantillas profesionales con IA.',
+    img: 'https://invideo.io/favicon.ico',
+    url: 'https://invideo.io', fav: false,
+    precio: '🆓 4 videos gratis/semana', velocidad: '🐢 Moderado',
+    prompts: [
+      'Create a 60-second YouTube intro about the top 5 AI tools in 2026 with voiceover',
+      'Make a motivational Instagram reel about productivity with upbeat background music',
+      'Generate a product explainer video for a mobile app with professional transitions',
+    ],
+  },
+  {
+    id: 'synthesia', nombre: 'Synthesia', categoria: 'Avatares',
+    desc: 'Crea videos con avatares IA presentando tu contenido. Sin cámara ni actores.',
+    img: 'https://www.synthesia.io/favicon.ico',
+    url: 'https://www.synthesia.io', fav: false,
+    precio: '💳 Desde $22/mes', velocidad: '🐢 Moderado',
+    prompts: [
+      'Create a 2-minute onboarding video with a professional female avatar in English',
+      'Generate a training video about workplace safety with subtitles in Spanish',
+      'Make a product demo video with an avatar presenting 5 key features clearly',
+    ],
+  },
+  {
+    id: 'hedra', nombre: 'Hedra', categoria: 'Avatares',
+    desc: 'Anima fotos con voz y expresiones reales usando IA. Perfecto para contenido con presentadores.',
+    img: 'https://www.hedra.com/favicon.ico',
+    url: 'https://www.hedra.com', fav: false,
+    precio: '🆓 Plan gratuito disponible', velocidad: '⚡ Rápido',
+    prompts: [
+      'Animate a portrait photo saying "Bienvenido a Webwii" with natural lip sync',
+      'Create a talking avatar from a cartoon illustration with an energetic voice',
+      'Generate a news presenter style video from a photo with formal speech delivery',
+    ],
+  },
+];
 
+let filtrados = [...VIDEOS];
+let orden     = 'fav';
+let busqueda  = '';
+
+const norm = s => (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+// ============================================================
+// 🏗️ RENDER
+// ============================================================
 export const render = () => `
   <div class="vid_wrap">
+
     <div class="vid_topbar">
-      <h1 class="vid_titulo">Herramientas de <span class="vid_grad">Video IA</span></h1>
-      <div class="vid_search_wrap">
-        <i class="fas fa-search"></i>
-        <input id="vid_search" type="text" placeholder="Buscar...">
-        <button id="vid_search_clr" style="display:none"><i class="fas fa-times"></i></button>
+      <h1 class="vid_titulo">Videos con <span class="vid_grad">Inteligencia Artificial</span></h1>
+      <div class="vid_ctrl">
+        <div class="vid_search_wrap">
+          <i class="fas fa-search"></i>
+          <input id="vid_search" type="text" placeholder="${VIDEOS.length} herramientas...">
+          <button id="vid_search_clr" style="display:none"><i class="fas fa-times"></i></button>
+        </div>
+        <select id="vid_orden" class="vid_sel">
+          <option value="fav">⭐ Favoritos</option>
+          <option value="nombre">🔤 Nombre</option>
+          <option value="cat">📁 Categoría</option>
+        </select>
+        <button id="vid_refresh" class="vid_refresh_btn" title="Actualizar">
+          <i class="fas fa-rotate-right"></i>
+        </button>
       </div>
-      <select id="vid_orden" class="vid_orden_sel">
-        <option value="fav">⭐ Favoritos</option>
-        <option value="reciente">🕐 Recientes</option>
-        <option value="antiguo">📅 Antiguos</option>
-      </select>
-      <button id="vid_refresh" class="vid_refresh_btn" ${wiTip('Actualizar')}>
-        <i class="fas fa-rotate-right"></i>
-      </button>
     </div>
-    <div class="vid_grid" id="vid_grid">${SKEL}</div>
+
+    <div class="vid_grid" id="vid_grid"></div>
+
     <div class="vid_empty" id="vid_empty" style="display:none">
-      <i class="fas fa-film"></i><h3>Sin resultados</h3><p>Intenta con otros términos</p>
+      <i class="fas fa-film"></i>
+      <h3>Sin resultados</h3>
+      <p>Intenta con otros términos</p>
     </div>
-  </div>
-  <div class="wiModal" id="modalVideo">
-    <div class="modalBody vid_modal_body">
-      <button class="modalX"><i class="fas fa-times"></i></button>
-      <h2 class="vid_modal_tit" id="vid_modal_tit"><i class="fas fa-film"></i> Agregar Herramienta</h2>
-      <form id="vid_form">
-        <div class="vid_form_row">
-          <div class="vid_form_g"><label><i class="fas fa-heading"></i> Nombre</label><input id="vid_nombre" type="text" placeholder="Ej: Runway" required></div>
-          <div class="vid_form_g"><label><i class="fas fa-key"></i> ID</label><input id="vid_id" type="text" placeholder="runway" required></div>
-        </div>
-        <div class="vid_form_g"><label><i class="fas fa-link"></i> URL de la herramienta</label><input id="vid_url" type="url" placeholder="https://..." required></div>
-        <div class="vid_form_g"><label><i class="fas fa-image"></i> URL imagen/logo</label><input id="vid_img" type="url" placeholder="https://..."></div>
-        <div class="vid_form_g"><label><i class="fas fa-align-left"></i> Descripción</label><textarea id="vid_desc" placeholder="Describe la herramienta..." rows="3" required></textarea></div>
-        <div class="vid_form_row">
-          <div class="vid_form_g"><label><i class="fas fa-tags"></i> Tags (coma separados)</label><input id="vid_tags" type="text" placeholder="gratis, texto a video, HD"></div>
-          <div class="vid_form_g"><label><i class="fas fa-star"></i> Favorito</label><select id="vid_fav"><option value="0">No</option><option value="1">Sí ⭐</option></select></div>
-        </div>
-        <div class="vid_form_actions">
-          <button type="button" id="vid_cancel"><i class="fas fa-times"></i> Cancelar</button>
-          <button type="submit" id="vid_save"><i class="fas fa-save"></i> Guardar</button>
-        </div>
-      </form>
-    </div>
+
   </div>`;
 
+// ============================================================
+// 🃏 CARD
+// ============================================================
+const cardHtml = h => `
+  <div class="vid_card wi_fadeUp" data-id="${h.id}">
+
+    <div class="vid_card_top">
+      <span class="vid_vel">${h.velocidad}</span>
+      ${h.fav ? '<span class="vid_fav"><i class="fas fa-star"></i></span>' : ''}
+      <img src="${h.img}" alt="${h.nombre}" loading="lazy"
+           onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(h.nombre)}&background=random&size=80'">
+      <h3 class="vid_nombre">${h.nombre}</h3>
+      <span class="vid_precio">${h.precio}</span>
+    </div>
+
+    <div class="vid_body">
+      <p class="vid_desc">${h.desc}</p>
+      <div class="vid_prompts">
+        <p class="vid_prompts_label"><i class="fas fa-wand-magic-sparkles"></i> Prompts recomendados</p>
+        ${h.prompts.map(p => `
+          <div class="vid_prompt_item">
+            <span>${p}</span>
+            <button class="vid_copy_btn" data-prompt="${p.replace(/"/g, '&quot;')}" title="Copiar">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="vid_foot">
+      <a href="${h.url}" target="_blank" rel="noopener" class="vid_btn_abrir">
+        <i class="fas fa-external-link-alt"></i> Abrir herramienta
+      </a>
+    </div>
+
+  </div>`;
+
+// ============================================================
+// ⚙️ INIT
+// ============================================================
 export const init = () => {
-  const traer = async (force = false) => {
-    if (!force) {
-      const cache = (getls(CACHE)||{}).data||[];
-      if (cache.length) { todos = cache; return aplicarOrden(); }
-    }
-    $('#vid_grid').html(SKEL);
-    try {
-      const snap = await getDocs(query(collection(db,'video'), orderBy('fecha','desc')));
-      todos = snap.docs.map(d => ({id:d.id,...d.data()}));
-      savels(CACHE, {data:todos}, 12);
-      aplicarOrden();
-    } catch(e) {
-      console.error('❌',e);
-      $('#vid_grid').html('<div class="vid_err"><i class="fas fa-exclamation-triangle"></i><p>Error al cargar</p></div>');
-    }
+
+  const aplicar = () => {
+    const ord = { fav:(a,b)=>(b.fav?1:0)-(a.fav?1:0), nombre:(a,b)=>a.nombre.localeCompare(b.nombre), cat:(a,b)=>a.categoria.localeCompare(b.categoria) };
+    filtrados = [...VIDEOS].sort(ord[orden] || ord.fav);
+    if (busqueda) filtrados = filtrados.filter(v => [v.nombre, v.desc, v.categoria, v.precio, ...v.prompts].some(x => norm(x).includes(norm(busqueda))));
+    renderizar();
   };
 
-  const actualizar = async () => {
-    localStorage.removeItem(CACHE); todos = []; filtrados = [];
-    wiSpin('#vid_refresh', true, '');
-    await traer(true);
-    wiSpin('#vid_refresh', false, '');
-    $('#vid_refresh').html('<i class="fas fa-rotate-right"></i>');
-    Notificacion('Actualizado ✓','success');
-  };
-
-  const aplicarOrden = () => {
-    const ord = $('#vid_orden').val();
-    const term = norm($('#vid_search').val().trim());
-    const s = {
-      fav:     (a,b) => (b.favorito|0)-(a.favorito|0),
-      reciente:(a,b) => (b.fecha?.seconds||0)-(a.fecha?.seconds||0),
-      antiguo: (a,b) => (a.fecha?.seconds||0)-(b.fecha?.seconds||0),
-    };
-    filtrados = [...todos].sort(s[ord]||s.fav);
-    if (term) filtrados = filtrados.filter(x =>
-      [x.nombre, x.descripcion, ...(x.tags||[])].some(v => norm(v).includes(term))
-    );
-    renderizar(filtrados);
-  };
-
-  const renderizar = (lista) => {
-    $('#vid_search').attr('placeholder', `Buscar en ${todos.length} herramientas...`);
+  const renderizar = () => {
     const $g = $('#vid_grid').empty();
-    if (!lista.length && !autenticado) return $('#vid_empty').fadeIn(200);
+    if (!filtrados.length) { $('#vid_empty').fadeIn(200); return; }
     $('#vid_empty').hide();
-    if (autenticado) $g.append(`
-      <div class="vid_card vid_card_add" id="vid_agregar">
-        <div class="vid_add_cnt">
-          <div class="vid_add_ico"><i class="fas fa-plus"></i></div>
-          <h3>Agregar</h3><p>Nueva herramienta</p>
-        </div>
-      </div>`);
-    if (!lista.length) return;
-    lista.forEach((h,i) => $g.append(`
-      <div class="vid_card" data-id="${h.id}" style="transition-delay:${Math.min(i*40,400)}ms">
-        <div class="vid_card_img">
-          <img src="${h.img||'/logo.webp'}" alt="${h.nombre}" loading="lazy">
-          ${h.favorito ? '<div class="vid_fav_badge"><i class="fas fa-star"></i></div>' : ''}
-          <div class="vid_over">
-            <a href="${h.url}" target="_blank" rel="noopener" class="vid_over_btn" ${wiTip('Abrir')}><i class="fas fa-external-link-alt"></i></a>
-            ${autenticado ? `
-            <button class="vid_over_btn vid_edit" data-id="${h.id}" ${wiTip('Editar')}><i class="fas fa-edit"></i></button>
-            <button class="vid_over_btn vid_del"  data-id="${h.id}" ${wiTip('Eliminar')}><i class="fas fa-trash"></i></button>` : ''}
-          </div>
-        </div>
-        <div class="vid_info">
-          <h3>${h.nombre}</h3>
-          <p>${h.descripcion||''}</p>
-          ${h.tags?.length ? `<div class="vid_tags">${h.tags.slice(0,3).map(t=>`<span>#${t}</span>`).join('')}</div>` : ''}
-        </div>
-      </div>`));
+    $g.html(filtrados.map(cardHtml).join(''));
+    wiVista('.vid_card', null, { anim: 'wi_fadeUp', stagger: 80 });
   };
 
-  $('#vid_form').on('submit', async function(e) {
+  // Copiar prompt
+  $(document).on('click', '.vid_copy_btn', function (e) {
     e.preventDefault();
-    const editId = $(this).data('editId');
-    const docId  = editId || `${toId($('#vid_id').val())}_${Date.now()}`;
-    const datos  = {
-      nombre: $('#vid_nombre').val().trim(), url: $('#vid_url').val().trim(),
-      img: $('#vid_img').val().trim(), descripcion: $('#vid_desc').val().trim(),
-      tags: $('#vid_tags').val().split(',').map(t=>t.trim()).filter(Boolean),
-      favorito: +$('#vid_fav').val(), autor: getls('wiSmile')?.usuario||'admin',
-      fecha: serverTimestamp(),
-    };
-    if (!datos.nombre||!datos.url) return Notificacion('Completa los campos','warning');
-    wiSpin('#vid_save');
-    try {
-      await setDoc(doc(db,'video',docId), datos, {merge:true});
-      Notificacion(editId?'Actualizado ✓':'Guardado ✓','success');
-      cerrarModal('modalVideo'); await traer(true);
-    } catch { Notificacion('Error al guardar','error'); }
-    finally { wiSpin('#vid_save', false); }
+    const $b = $(this);
+    navigator.clipboard?.writeText($b.data('prompt')).then(() => {
+      $b.html('<i class="fas fa-check"></i>');
+      setTimeout(() => $b.html('<i class="fas fa-copy"></i>'), 1500);
+    });
   });
 
-  $(document).on('click','.vid_edit', function(e) {
-    e.stopPropagation();
-    const p = todos.find(x => x.id===$(this).data('id')); if (!p) return;
-    $('#vid_modal_tit').html('<i class="fas fa-edit"></i> Editar Herramienta');
-    $('#vid_nombre').val(p.nombre); $('#vid_id').val(p.id).prop('readonly',true);
-    $('#vid_url').val(p.url); $('#vid_img').val(p.img);
-    $('#vid_desc').val(p.descripcion); $('#vid_tags').val((p.tags||[]).join(', '));
-    $('#vid_fav').val(p.favorito||0); $('#vid_form').data('editId',p.id);
-    abrirModal('modalVideo');
-  });
-
-  $(document).on('click','.vid_del', async function(e) {
-    e.stopPropagation();
-    if (!confirm('¿Eliminar?')) return;
-    try {
-      await deleteDoc(doc(db,'video',$(this).data('id')));
-      Notificacion('Eliminada ✓','success'); await traer(true);
-    } catch { Notificacion('Error al eliminar','error'); }
-  });
-
-  $(document).on('click','#vid_agregar', () => {
-    $('#vid_form')[0].reset(); $('#vid_form').removeData('editId');
-    $('#vid_id').prop('readonly',false);
-    $('#vid_modal_tit').html('<i class="fas fa-film"></i> Agregar Herramienta');
-    abrirModal('modalVideo');
-  });
-
-  $('#vid_nombre').on('input', function() {
-    if (!$('#vid_id').prop('readonly')) $('#vid_id').val(toId($(this).val()));
-  });
-
+  // Búsqueda
   let to;
-  $('#vid_search').on('input', function() {
-    $('#vid_search_clr').toggle(!!$(this).val().trim());
-    clearTimeout(to); to = setTimeout(aplicarOrden, 220);
+  $('#vid_search').on('input', function () {
+    busqueda = $(this).val().trim();
+    $('#vid_search_clr').toggle(!!busqueda);
+    clearTimeout(to); to = setTimeout(aplicar, 220);
   });
-
   $('#vid_search_clr').on('click', () => $('#vid_search').val('').trigger('input').focus());
-  $('#vid_cancel').on('click', () => cerrarModal('modalVideo'));
-  $('#vid_orden').on('change', aplicarOrden);
-  $('#vid_refresh').on('click', actualizar);
 
-  let ac = 0;
-  $(document).on('click','.vid_titulo', () => {
-    if (++ac >= 7) { autenticado = true; ac = 0; renderizar(filtrados); Notificacion('¡Dios te Ama! 🙏','success'); }
+  // Orden
+  $('#vid_orden').on('change', function () { orden = $(this).val(); aplicar(); });
+
+  // Refresh
+  $('#vid_refresh').on('click', function () {
+    busqueda = ''; orden = 'fav';
+    $('#vid_search').val('').trigger('input');
+    $('#vid_orden').val('fav');
+    const $i = $(this).find('i');
+    $i.css({ transition: 'transform .5s', transform: 'rotate(360deg)' });
+    setTimeout(() => $i.css({ transition: 'none', transform: 'rotate(0deg)' }), 520);
+    aplicar();
   });
 
-  traer();
-  console.log(`🎬 Video · ${year()}`);
+  aplicar();
+  console.log('🎬 Video IA · 2026');
 };
 
-export const cleanup = () => { autenticado = !!getls('wiSmile'); console.log('🧹 Video'); };
+export const cleanup = () => {
+  orden = 'fav'; busqueda = '';
+  $(document).off('click', '.vid_copy_btn');
+  console.log('🧹 Video');
+};
