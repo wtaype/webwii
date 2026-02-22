@@ -325,10 +325,9 @@
 /* Icono / Logo */
 .mo_icon_wrap {
   width: 56px; height: 56px; border-radius: 16px;
-  background: linear-gradient(135deg, var(--mco), var(--bg2));
   display: flex; justify-content: center; align-items: center;
   color: var(--txa); font-size: 1.5rem; overflow: hidden;
-  box-shadow: 0 6px 20px var(--bg5); transition: transform .4s; margin-bottom: .3vh;
+  transition: transform .4s; margin-bottom: .3vh;
 }
 .mo_icon_wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
 .mo_card:hover .mo_icon_wrap { transform: scale(1.1) rotate(-5deg); }

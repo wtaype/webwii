@@ -97,28 +97,28 @@ export const renderModal = ({ p, icon, campos = [], extraRows = '' }) => `
             <input id="${p}_precio" type="text" placeholder="💳 Desde $5/mes">
           </div>
           <div class="mo_form_g">
-            <label><i class="fas fa-bolt"></i> Velocidad</label>
-            <select id="${p}_vel">
-              <option value="⚡ Rápido">⚡ Rápido</option>
-              <option value="🚀 Muy rápido">🚀 Muy rápido</option>
-              <option value="🐢 Moderado">🐢 Moderado</option>
-              <option value="🐌 Lento">🐌 Lento</option>
-            </select>
+            <label><i class="fas fa-image"></i> Logo / Imagen URL</label>
+            <input id="${p}_img" type="url" placeholder="Imagenlogo.png">
           </div>
         </div>
 
         <!-- Favorito + Imagen/Logo -->
         <div class="mo_form_row">
           <div class="mo_form_g">
+            <label><i class="fas fa-bolt"></i> Velocidad</label>
+            <select id="${p}_vel">
+            <option value="🐢 Moderado">🐢 Moderado</option>
+              <option value="⚡ Rápido">⚡ Rápido</option>
+              <option value="🚀 Muy rápido">🚀 Muy rápido</option>
+              <option value="🐌 Lento">🐌 Lento</option>
+            </select>
+          </div>
+          <div class="mo_form_g">
             <label><i class="fas fa-star"></i> Favorito</label>
             <select id="${p}_fav">
               <option value="false">No</option>
               <option value="true">Sí ⭐</option>
             </select>
-          </div>
-          <div class="mo_form_g">
-            <label><i class="fas fa-image"></i> Logo / Imagen URL</label>
-            <input id="${p}_img" type="url" placeholder="https://sitio.com/logo.png">
           </div>
         </div>
 

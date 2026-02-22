@@ -11,7 +11,7 @@ export { auth, onAuthStateChanged, signOut };
 
 // ==================== CONFIG ====================
 const cfg = { db: 'smiles', rol: 'smile' };
-let login = 'si', registrar = 'si', restablecer = 'no';
+let login = 'si', registrar = 'no', restablecer = 'no';
 
 const err = {
   'auth/email-already-in-use':'Email ya registrado', 'auth/weak-password':'Contraseña débil',
