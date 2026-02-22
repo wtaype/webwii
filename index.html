@@ -320,14 +320,14 @@ blockquote{padding:1.5vh 2vh;margin:2vh 0;background:var(--bg4);border-left:4px 
 </header>
 <main id="wimain"></main>
 <div id="wiTema">
-  <div class="tema" data-ths="Cielo|#0EBEFF"></div>
+  <div class="tema mtha" data-ths="Cielo|#0EBEFF"></div>
   <div class="tema" data-ths="Dulce|#FF5C69"></div>
   <div class="tema" data-ths="Paz|#29C72E"></div>
   <div class="tema" data-ths="Mora|#7000FF"></div>
-  <div class="tema mtha" data-ths="Futuro|#21273B"></div>
+  <div class="tema" data-ths="Futuro|#21273B"></div>
 </div>
 </body>
-<script>(()=>{const d=document,h=d.documentElement,w=d.querySelector('#wiTema');if(!w)return;const ts=[...w.querySelectorAll('.tema')],m=d.querySelector('meta[name="theme-color"]')||d.head.appendChild(Object.assign(d.createElement('meta'),{name:'theme-color'})),st=t=>{const[n,c]=t.dataset.ths.split('|');h.dataset.theme=n;m.content=c;localStorage.wiTema=t.dataset.ths;ts.forEach(x=>x.classList.toggle('mtha',x===t))};w.addEventListener('click',e=>e.target.matches('.tema')&&st(e.target),{passive:!0});const i=w.querySelector(`[data-ths="${localStorage.wiTema}"]`)||ts[4];i&&st(i)})();</script>
+<script>(()=>{const d=document,h=d.documentElement,w=d.querySelector('#wiTema');if(!w)return;const ts=[...w.querySelectorAll('.tema')],m=d.querySelector('meta[name="theme-color"]')||d.head.appendChild(Object.assign(d.createElement('meta'),{name:'theme-color'})),st=t=>{const[n,c]=t.dataset.ths.split('|');h.dataset.theme=n;m.content=c;localStorage.wiTema=t.dataset.ths;ts.forEach(x=>x.classList.toggle('mtha',x===t))};w.addEventListener('click',e=>e.target.matches('.tema')&&st(e.target),{passive:!0});const i=w.querySelector(`[data-ths="${localStorage.wiTema}"]`)||ts[0];i&&st(i)})();</script>
 <script type="module">
   (() => {
     const k = 'wiflash', c = localStorage[k], e = ['touchstart', 'scroll', 'click', 'mousemove']; let l = 0; const load = () => {
