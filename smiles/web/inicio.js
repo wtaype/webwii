@@ -85,7 +85,7 @@ export const render = () => `
         <div class="ini_profile_container">
           <div class="ini_profile_ring"></div>
           <div class="ini_profile_ring ini_ring2"></div>
-          <img src="/logo.webp" alt="${app}" class="ini_profile_img" loading="lazy"/>
+          <img src="${import.meta.env.BASE_URL}logo.webp" alt="${app}" class="ini_profile_img" loading="lazy"/>
           <div class="ini_profile_badge"><i class="fas fa-circle"></i> Online</div>
         </div>
         <div class="ini_ftech ini_ft1" ${wiTip('Imágenes IA')}><i class="fas fa-image"></i></div>

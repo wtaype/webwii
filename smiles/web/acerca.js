@@ -56,7 +56,7 @@ export const render = () => `
       <div class="ac_hero_orb ac_orb2"></div>
       <div class="ac_hero_body">
         <div class="ac_hero_logo">
-          <img src="/logo.webp" alt="${app}" loading="lazy">
+          <img src="${import.meta.env.BASE_URL}logo.webp" alt="${app}" loading="lazy">
         </div>
         <div class="ac_hero_badge"><i class="fas fa-robot"></i> Centro de Inteligencia Artificial</div>
         <h1 class="ac_hero_tit">${app}</h1>
