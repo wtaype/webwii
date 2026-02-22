@@ -1,4 +1,3 @@
-import './ideas.css';
 import $ from 'jquery';
 import { db } from '../smile/firebase.js';
 import { collection, doc, setDoc, getDocs, deleteDoc, serverTimestamp, query, orderBy } from 'firebase/firestore';
