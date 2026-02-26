@@ -32,6 +32,7 @@ export const renderTopbar = ({ p, titulo, grad }) => `
         <button id="${p}_search_clr" style="display:none"><i class="fas fa-times"></i></button>
       </div>
       <select id="${p}_orden" class="mo_sel">
+        <option value="orden">🔢 Orden</option>
         <option value="fav">⭐ Favoritos</option>
         <option value="reciente">🕐 Recientes</option>
         <option value="antiguo">📅 Antiguos</option>
@@ -84,10 +85,16 @@ export const renderModal = ({ p, icon, campos = [], extraRows = '' }) => `
           </div>
         </div>
 
-        <!-- Link -->
-        <div class="mo_form_g">
-          <label><i class="fas fa-link"></i> Link</label>
-          <input id="${p}_link" type="url" placeholder="https://..." required>
+        <!-- Link + Orden -->
+        <div class="mo_form_row">
+          <div class="mo_form_g">
+            <label><i class="fas fa-link"></i> Link</label>
+            <input id="${p}_link" type="url" placeholder="https://..." required>
+          </div>
+          <div class="mo_form_g">
+            <label><i class="fas fa-sort-numeric-up"></i> Orden</label>
+            <input id="${p}_orden_campo" type="number" placeholder="1, 2, 3..." min="0" value="0">
+          </div>
         </div>
 
         <!-- Precio + Velocidad -->
@@ -222,6 +229,7 @@ export const crearModelo = ({
       [`#${p}_vel`]:    h.velocidad || '⚡ Rápido',
       [`#${p}_img`]:    h.img || '',
       [`#${p}_desc`]:   h.descripcion,
+      [`#${p}_orden_campo`]: h.orden ?? 0,
     };
     Object.entries({ ...fields, ...extraFields(h) }).forEach(([sel, val]) => $(sel).val(val));
     $(`#${p}_fav`).val(String(!!h.favorito));
@@ -256,11 +264,12 @@ export const crearModelo = ({
       const ord  = $(`#${p}_orden`).val() || 'fav';
       const term = norm($(`#${p}_search`).val().trim());
       const S = {
+        orden:    (a,b) => (a.orden??999)-(b.orden??999),
         fav:      (a,b) => (b.favorito?1:0)-(a.favorito?1:0),
         reciente: (a,b) => (b.fechaCreado?.seconds||0)-(a.fechaCreado?.seconds||0),
         antiguo:  (a,b) => (a.fechaCreado?.seconds||0)-(b.fechaCreado?.seconds||0),
       };
-      filtrados = [...todos].sort(S[ord]||S.fav);
+      filtrados = [...todos].sort(S[ord]||S.orden);
       if (term) filtrados = filtrados.filter(h =>
         [h.nombre, h.descripcion, h.precio, h.velocidad, ...(h.prompts||[])].some(v => norm(v).includes(term))
       );
@@ -301,6 +310,7 @@ export const crearModelo = ({
         prompts:     getPrompts(),
         favorito:    $(`#${p}_fav`).val() === 'true',
         usuario:     getls('wiSmile')?.usuario || 'admin',
+        orden: parseInt($(`#${p}_orden_campo`).val()) || 0,
         ...extraDatos(),
         ...(editId ? { Actualizado: serverTimestamp() } : { fechaCreado: serverTimestamp() }),
       };
